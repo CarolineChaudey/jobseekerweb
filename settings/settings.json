@@ -1,10 +1,11 @@
 {
   "db": {
-        "url": "mysql://localhost:27017/gbay"
+        "url": "mysql://localhost:27017/service"
   },
   "port": 3000,
   "roles": [
-    "User",
-    "Admin"
+    "seeker",
+    "supervisor",
+    "admin"
   ]
 }
