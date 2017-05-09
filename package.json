@@ -1,0 +1,33 @@
+{
+  "name": "jobseekservice",
+  "version": "1.0.0",
+  "description": "web service for jobseeker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://CodingMouse@bitbucket.org/esgijobseeker/jobseekerservice.git"
+  },
+  "keywords": [
+    "job",
+    "seeker",
+    "jobseeker",
+    "webservice",
+    "web",
+    "service"
+  ],
+  "author": "Caroline Chaudey, Abderahmane Marega",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/esgijobseeker/jobseekerservice#readme",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "jsonwebtoken": "^7.4.0",
+    "pg": "^6.1.5",
+    "sequelize": "^3.30.4",
+    "sha1": "^1.1.1"
+  }
+}

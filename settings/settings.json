@@ -1,0 +1,10 @@
+{
+  "db": {
+        "url": "mysql://localhost:27017/gbay"
+  },
+  "port": 3000,
+  "roles": [
+    "User",
+    "Admin"
+  ]
+}
