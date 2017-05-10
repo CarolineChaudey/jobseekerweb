@@ -5,7 +5,7 @@ const path = './entities/';
 
 module.exports = (server) => {
 
-    server.connection = new Sequelize('gbay', 'root', 'azerty', {
+    server.connection = new Sequelize('service', 'root', 'azerty', {
       //host: '192.168.0.33',
       host: 'localhost',
       port: 3306,
