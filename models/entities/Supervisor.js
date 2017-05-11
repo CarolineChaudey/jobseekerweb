@@ -1,5 +1,4 @@
 const Sequelize = require('sequelize');
-let Tokenify = require('sequelize-tokenify');
 let User = require('./User.js');
 
 module.exports = (api) => {

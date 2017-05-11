@@ -32,6 +32,11 @@ module.exports = (api) => {
       type: Sequelize.STRING,
       field: 'email',
       allowNull: false
+    },
+    token: {
+      type: Sequelize.STRING,
+      field: 'token',
+      allowNull: true
     }
   };
 
