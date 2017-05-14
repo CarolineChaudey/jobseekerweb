@@ -32,7 +32,6 @@ module.exports = (server) => {
     }
     console.log('Models created.');
 
-    // relations entre les entités (donc les tables)
 
     // un chercheur a un superviseur
     server.models.Seeker.belongsTo(server.models.Supervisor);
@@ -65,17 +64,17 @@ module.exports = (server) => {
     server.models.Ad.belongsTo(server.models.Website);
     server.models.Website.hasMany(server.models.Ad);
     // une annonce a plusieurs tags
-    server.models.Ad.belongsToMany(server.models.Tag);
-    server.models.Tag.belongsToMany(server.models.Ad);
+    server.models.Ad.belongsToMany(server.models.Tag, {through: 'TagAd'});
+    server.models.Tag.belongsToMany(server.models.Ad, {through: 'TagAd'});
     // un chercheur a des sites web préférés
-    server.models.Seeker.belongsToMany(server.models.Website);
-    server.models.Website.belongsToMany(server.models.User);
+    server.models.Seeker.belongsToMany(server.models.Website, {through: 'FavoriteWebsite'});
+    server.models.Website.belongsToMany(server.models.Seeker, {through: 'FavoriteWebsite'});
     // un seeker a des contrats préférés
-    server.models.Seeker.belongsToMany(server.models.Contract);
-    server.models.Contract.belongsToMany(server.models.Seeker);
+    server.models.Seeker.belongsToMany(server.models.Contract, {through: 'FavoriteContract'});
+    server.models.Contract.belongsToMany(server.models.Seeker, {through: 'FavoriteContract'});
     // une annonce peurt proposer jusqu'à plusieurs types de contrats
-    server.models.Ad.belongsToMany(server.models.Contract);
-    server.models.Contract.belongsToMany(server.models.Ad);
+    server.models.Ad.belongsToMany(server.models.Contract, {through: 'ProposedContracts'});
+    server.models.Contract.belongsToMany(server.models.Ad, {through: 'ProposedContracts'});
 
 
     server.connection.sync().then(function() {
