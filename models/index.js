@@ -34,35 +34,35 @@ module.exports = (server) => {
 
 
     // un chercheur a un superviseur
-    server.models.Seeker.belongsTo(server.models.Supervisor);
-    server.models.Supervisor.hasMany(server.models.Seeker);
+    server.models.Seeker.belongsTo(server.models.Supervisor, {as: 'supervisor'});
+    server.models.Supervisor.hasMany(server.models.Seeker, {as: 'seekers'});
     // un chercheur a plusieurs modeles de lettres ...
-    server.models.Letter.belongsTo(server.models.Seeker);
-    server.models.Seeker.hasMany(server.models.Letter);
+    server.models.Letter.belongsTo(server.models.Seeker, {as: 'seeker'});
+    server.models.Seeker.hasMany(server.models.Letter, {as: 'letters'});
     // ... et plusieurs CV
-    server.models.Resume.belongsTo(server.models.Seeker);
-    server.models.Seeker.hasMany(server.models.Resume);
+    server.models.Resume.belongsTo(server.models.Seeker, {as: 'seeker'});
+    server.models.Seeker.hasMany(server.models.Resume, {as: 'resumes'});
     // un chercheur peut déposer plusieurs candidatures qui lui sont propres
-    server.models.Application.belongsTo(server.models.Seeker);
-    server.models.Seeker.hasMany(server.models.Application);
+    server.models.Application.belongsTo(server.models.Seeker, {as: 'seeker'});
+    server.models.Seeker.hasMany(server.models.Application, {as: 'applications'});
     // la candidature comprend une modèle de lettre utilisé ...
-    server.models.Application.belongsTo(server.models.Letter);
-    server.models.Letter.hasMany(server.models.Application);
+    server.models.Application.belongsTo(server.models.Letter, {as: 'letter'});
+    server.models.Letter.hasMany(server.models.Application, {as: 'applications'});
     // ... et un CV
-    server.models.Application.belongsTo(server.models.Resume);
-    server.models.Resume.hasMany(server.models.Application);
+    server.models.Application.belongsTo(server.models.Resume, {as: 'resume'});
+    server.models.Resume.hasMany(server.models.Application, {as: 'applications'});
     // la candidature est dans un état
-    server.models.Application.belongsTo(server.models.ApplicationState);
-    server.models.ApplicationState.hasMany(server.models.Application);
+    server.models.Application.belongsTo(server.models.ApplicationState, {as: 'state'});
+    server.models.ApplicationState.hasMany(server.models.Application, {as: 'applications'});
     // la candidature concerne une annonce
-    server.models.Application.belongsTo(server.models.Ad);
-    server.models.Ad.hasMany(server.models.Application);
+    server.models.Application.belongsTo(server.models.Ad, {as: 'ad'});
+    server.models.Ad.hasMany(server.models.Application, {as: 'applications'});
     // L'annonce provient d'une entreprise
-    server.models.Ad.belongsTo(server.models.Company);
-    server.models.Company.hasMany(server.models.Ad);
+    server.models.Ad.belongsTo(server.models.Company, {as: 'company'});
+    server.models.Company.hasMany(server.models.Ad, {as: 'ads'});
     // L'annonce a été postée sur un site
-    server.models.Ad.belongsTo(server.models.Website);
-    server.models.Website.hasMany(server.models.Ad);
+    server.models.Ad.belongsTo(server.models.Website, {as: 'website'});
+    server.models.Website.hasMany(server.models.Ad, {as: 'ads'});
     // une annonce a plusieurs tags
     server.models.Ad.belongsToMany(server.models.Tag, {through: 'TagAd'});
     server.models.Tag.belongsToMany(server.models.Ad, {through: 'TagAd'});
