@@ -34,8 +34,8 @@ module.exports = (server) => {
 
 
     // un chercheur a un superviseur
-    server.models.Seeker.belongsTo(server.models.Supervisor, {as: 'supervisor'});
-    server.models.Supervisor.hasMany(server.models.Seeker, {as: 'seekers'});
+    server.models.Seeker.belongsTo(server.models.Supervisor, {as: 'supervisor', foreignKey: 'supervisorId'});
+    server.models.Supervisor.hasMany(server.models.Seeker, {as: 'seekers', foreignKey: 'supervisorId'});
     // un chercheur a plusieurs modeles de lettres ...
     server.models.Letter.belongsTo(server.models.Seeker, {as: 'seeker'});
     server.models.Seeker.hasMany(server.models.Letter, {as: 'letters'});
