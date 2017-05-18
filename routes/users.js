@@ -13,6 +13,13 @@ module.exports = (api) => {
               api.middlewares.checkFields(['name', 'surname', 'login', 'password', 'email']),
               api.actions.users.create);
 
+  router.post('/seeker-auth',
+              api.middlewares.bodyParser.json(),
+              api.middlewares.checkFields(['login', 'password']),
+              api.actions.users.connectSeeker);
+
+
+
 /*
   router.put('/:id',
   api.middlewares.bodyParser.json(),
