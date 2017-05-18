@@ -7,5 +7,7 @@
     "seeker",
     "supervisor",
     "admin"
-  ]
+  ],
+  "salt": "oualala",
+  "token_duration": "1h"
 }
