@@ -10,7 +10,7 @@ module.exports = (api) => {
     })
     .spread((seeker, created) => {
       if (!created) {
-        return res.status(409).send('already taken');
+        return res.status(409).send('login taken');
       }
       return res.status(200).send(seeker);
     });
