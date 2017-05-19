@@ -5,6 +5,7 @@ module.exports = (api) => {
   const Seeker = api.models.Seeker;
 
   function create(req, res, next) {
+    req.body.password = sha1(req.body.password);
     Seeker.findOrCreate({
       where: {login: req.body.login},
       defaults: req.body
@@ -21,7 +22,7 @@ module.exports = (api) => {
     // trouver Seeker
     let seeker = Seeker.findOne(
       {where : {login: req.body.login,
-                password: req.body.password}}
+                password: sha1(req.body.password)}}
     ).then((seeker) => {
       if (!seeker) {
         return res.status(404).send('Wrong login and/or password');
