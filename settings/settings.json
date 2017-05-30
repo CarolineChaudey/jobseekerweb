@@ -8,6 +8,13 @@
     "supervisor",
     "admin"
   ],
+  "applicationStates": [
+    "CREATED",
+    "SENT",
+    "REFUSED",
+    "INTERVIEW",
+    "ACCEPTED"
+  ],
   "salt": "oualala",
   "token_duration": "1h"
 }

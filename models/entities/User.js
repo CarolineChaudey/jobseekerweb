@@ -9,14 +9,14 @@ module.exports = (api) => {
       primaryKey: true,
       defaultValue: Sequelize.UUIDV4
     },
-    name: {
+    firstname: {
       type: Sequelize.STRING,
-      field: 'name',
+      field: 'firstname',
       allowNull: false
     },
-    surname: {
+    lastname: {
       type: Sequelize.STRING,
-      field: 'surname',
+      field: 'lastname',
       allowNull: false
     },
     login: {
@@ -24,9 +24,9 @@ module.exports = (api) => {
       field: 'login',
       allowNull: false
     },
-    password: {
+    pswd: {
       type: Sequelize.STRING,
-      field: 'pwd',
+      field: 'pswd',
       allowNull: false
     },
     email: {

@@ -5,7 +5,7 @@ module.exports = (api) => {
       tag: {
         type: Sequelize.STRING,
         field: 'tag',
-        allowNull: false
+        primaryKey: true
       }
     }, {
       tableName: 'Tag',

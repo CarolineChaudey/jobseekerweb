@@ -10,12 +10,12 @@ module.exports = (api) => {
 */
   router.post('/',
               api.middlewares.bodyParser.json(),
-              api.middlewares.checkFields(['name', 'surname', 'login', 'password', 'email']),
+              api.middlewares.checkFields(['firstname', 'lastname', 'login', 'pswd', 'email']),
               api.actions.users.create);
 
   router.post('/seeker-auth',
               api.middlewares.bodyParser.json(),
-              api.middlewares.checkFields(['login', 'password']),
+              api.middlewares.checkFields(['login', 'pswd']),
               api.actions.users.connectSeeker);
 
 
