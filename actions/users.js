@@ -22,7 +22,7 @@ module.exports = (api) => {
     // trouver Seeker
     let seeker = Seeker.findOne(
       {where : {login: req.body.login,
-                password: sha1(req.body.pswd)}}
+                pswd: sha1(req.body.pswd)}}
     ).then((seeker) => {
       if (!seeker) {
         return res.status(404).send('Wrong login and/or password');

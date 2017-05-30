@@ -21,7 +21,7 @@ module.exports = (server) => {
         Ad:               require(path + 'Ad')(server),
         Company:          require(path + 'Company')(server),
         Application:      require(path + 'Application')(server),
-        ContractType:         require(path + 'ContractType')(server),
+        ContractType:     require(path + 'ContractType')(server),
         Letter:           require(path + 'Letter')(server),
         Resume:           require(path + 'Resume')(server),
         Seeker:           require(path + 'Seeker')(server),

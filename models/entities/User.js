@@ -11,12 +11,12 @@ module.exports = (api) => {
     },
     firstname: {
       type: Sequelize.STRING,
-      field: 'name',
+      field: 'firstname',
       allowNull: false
     },
     lastname: {
       type: Sequelize.STRING,
-      field: 'surname',
+      field: 'lastname',
       allowNull: false
     },
     login: {
@@ -26,7 +26,7 @@ module.exports = (api) => {
     },
     pswd: {
       type: Sequelize.STRING,
-      field: 'pwd',
+      field: 'pswd',
       allowNull: false
     },
     email: {
