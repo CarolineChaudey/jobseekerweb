@@ -18,7 +18,7 @@ module.exports = (api) => {
         field: 'publicationDate',
         allowNull: false
       },
-      email: {
+      contactEmail: {
         type: Sequelize.STRING,
         field: 'email',
         allowNull: true
@@ -31,6 +31,11 @@ module.exports = (api) => {
       description: {
         type: Sequelize.STRING,
         field: 'description',
+        allowNull: true
+      },
+      jobDuration: {
+        type: Sequelize.INTEGER,
+        field: 'jobDuration',
         allowNull: true
       }
     }, {

@@ -9,12 +9,12 @@ module.exports = (api) => {
       primaryKey: true,
       defaultValue: Sequelize.UUIDV4
     },
-    name: {
+    firstname: {
       type: Sequelize.STRING,
       field: 'name',
       allowNull: false
     },
-    surname: {
+    lastname: {
       type: Sequelize.STRING,
       field: 'surname',
       allowNull: false
@@ -24,7 +24,7 @@ module.exports = (api) => {
       field: 'login',
       allowNull: false
     },
-    password: {
+    pswd: {
       type: Sequelize.STRING,
       field: 'pwd',
       allowNull: false

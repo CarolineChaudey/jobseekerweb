@@ -19,10 +19,9 @@ module.exports = (server) => {
 
     server.models = {
         Ad:               require(path + 'Ad')(server),
-        Application:      require(path + 'Application')(server),
-        ApplicationState: require(path + 'ApplicationState')(server),
         Company:          require(path + 'Company')(server),
-        Contract:         require(path + 'Contract')(server),
+        Application:      require(path + 'Application')(server),
+        Contract:         require(path + 'ContractType')(server),
         Letter:           require(path + 'Letter')(server),
         Resume:           require(path + 'Resume')(server),
         Seeker:           require(path + 'Seeker')(server),
@@ -51,9 +50,6 @@ module.exports = (server) => {
     // ... et un CV
     server.models.Application.belongsTo(server.models.Resume, {as: 'resume'});
     server.models.Resume.hasMany(server.models.Application, {as: 'applications'});
-    // la candidature est dans un état
-    server.models.Application.belongsTo(server.models.ApplicationState, {as: 'state'});
-    server.models.ApplicationState.hasMany(server.models.Application, {as: 'applications'});
     // la candidature concerne une annonce
     server.models.Application.belongsTo(server.models.Ad, {as: 'ad'});
     server.models.Ad.hasMany(server.models.Application, {as: 'applications'});

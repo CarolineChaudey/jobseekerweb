@@ -11,6 +11,11 @@ module.exports = (api) => {
         type: Sequelize.STRING,
         field: 'title',
         allowNull: false
+      },
+      content: {
+        type: Sequelize.STRING,
+        field: 'content',
+        allowNull: false
       }
     }, {
       tableName: 'Letter',

@@ -7,6 +7,12 @@ module.exports = (api) => {
         field: 'id',
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4
+      },
+      state: {
+        type: Sequelize.ENUM(api.settings.applicationStates),
+        field: 'state',
+        allowNull: false,
+        defaultValue: api.settings.applicationStates[0] // "CREATED"
       }
     }, {
       tableName: 'Application',

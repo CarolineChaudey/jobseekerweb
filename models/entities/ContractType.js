@@ -1,14 +1,14 @@
 const Sequelize = require('sequelize');
 
 module.exports = (api) => {
-    return api.connection.define('ApplicationState', {
-      state: {
+    return api.connection.define('ContractType', {
+      name: {
         type: Sequelize.STRING,
-        field: 'state',
+        field: 'name',
         primaryKey: true
       }
     }, {
-      tableName: 'ApplicationState',
+      tableName: 'Contract',
       paranoid: true
     });
 }
