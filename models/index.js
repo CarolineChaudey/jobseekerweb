@@ -6,7 +6,7 @@ const path = './entities/';
 module.exports = (server) => {
 
     // config de la connexion
-    server.connection = new Sequelize('service', 'postgres', 'azerty', {
+    server.connection = new Sequelize('service', 'dev', 'azerty', {
       host: 'localhost',
       port: 5432,
       dialect: 'postgres',
