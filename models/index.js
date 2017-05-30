@@ -21,7 +21,7 @@ module.exports = (server) => {
         Ad:               require(path + 'Ad')(server),
         Company:          require(path + 'Company')(server),
         Application:      require(path + 'Application')(server),
-        Contract:         require(path + 'ContractType')(server),
+        ContractType:         require(path + 'ContractType')(server),
         Letter:           require(path + 'Letter')(server),
         Resume:           require(path + 'Resume')(server),
         Seeker:           require(path + 'Seeker')(server),
@@ -33,8 +33,11 @@ module.exports = (server) => {
 
 
     // un chercheur a un superviseur
-    server.models.Seeker.belongsTo(server.models.Supervisor, {as: 'supervisor', foreignKey: 'supervisorId'});
-    server.models.Supervisor.hasMany(server.models.Seeker, {as: 'seekers', foreignKey: 'supervisorId'});
+    server.models.Seeker.belongsTo(server.models.Supervisor, {as: 'supervisor'});
+    server.models.Supervisor.hasMany(server.models.Seeker, {as: 'seekers'});
+    // un supervisor appartient à une entreprise
+    server.models.Supervisor.belongsTo(server.models.Company, {as: 'company'});
+    server.models.Company.hasMany(server.models.Supervisor, {as: 'supervisors'});
     // un chercheur a plusieurs modeles de lettres ...
     server.models.Letter.belongsTo(server.models.Seeker, {as: 'seeker'});
     server.models.Seeker.hasMany(server.models.Letter, {as: 'letters'});
@@ -65,12 +68,15 @@ module.exports = (server) => {
     // un chercheur a des sites web préférés
     server.models.Seeker.belongsToMany(server.models.Website, {through: 'FavoriteWebsite'});
     server.models.Website.belongsToMany(server.models.Seeker, {through: 'FavoriteWebsite'});
+    // un chercheur a des tags preferes
+    server.models.Seeker.belongsToMany(server.models.Tag, {through: 'FavoriteTags'});
+    server.models.Tag.belongsToMany(server.models.Seeker, {through: 'FavoriteTags'});
     // un seeker a des contrats préférés
-    server.models.Seeker.belongsToMany(server.models.Contract, {through: 'FavoriteContract'});
-    server.models.Contract.belongsToMany(server.models.Seeker, {through: 'FavoriteContract'});
+    server.models.Seeker.belongsToMany(server.models.ContractType, {through: 'FavoriteContract'});
+    server.models.ContractType.belongsToMany(server.models.Seeker, {through: 'FavoriteContract'});
     // une annonce peurt proposer jusqu'à plusieurs types de contrats
-    server.models.Ad.belongsToMany(server.models.Contract, {through: 'ProposedContracts'});
-    server.models.Contract.belongsToMany(server.models.Ad, {through: 'ProposedContracts'});
+    server.models.Ad.belongsToMany(server.models.ContractType, {through: 'ProposedContracts'});
+    server.models.ContractType.belongsToMany(server.models.Ad, {through: 'ProposedContracts'});
 
 
     server.connection.sync().then(function() {
