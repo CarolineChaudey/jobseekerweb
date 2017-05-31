@@ -31,6 +31,17 @@ module.exports = (api) => {
     });
   }
 
+  function update(req, res, next) {
+    Seeker.update(req.body,
+                  {where: {id: req.params.id}})
+    .then((result) => {
+      if (result[0] != 1) {
+        return res.status(400).send('update failed.');
+      }
+      return res.status(200).send('Update succeed.');
+    });
+  }
+
   function sendToken(seeker, res) {
     jwt.sign({ userId: seeker.id },
               api.settings.salt,
@@ -50,6 +61,6 @@ module.exports = (api) => {
     });
   }
 
-  return {create, connectSeeker};
+  return {create, connectSeeker, update};
 
 };
