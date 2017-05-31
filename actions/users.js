@@ -38,7 +38,7 @@ module.exports = (api) => {
       if (result[0] != 1) {
         return res.status(400).send('update failed.');
       }
-      return res.status(200).send('Update succeed.');
+      return res.status(200).send('Update succeeded.');
     });
   }
 
