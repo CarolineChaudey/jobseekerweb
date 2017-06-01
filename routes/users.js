@@ -22,6 +22,10 @@ module.exports = (api) => {
              api.middlewares.bodyParser.json(),
              api.actions.users.setFavoriteWebsites);
 
+  router.put('/:id/favoriteContractTypes',
+             api.middlewares.bodyParser.json(),
+             api.actions.users.setContractTypes);
+
   router.put('/:id',
              api.middlewares.bodyParser.json(),
              api.actions.users.update);

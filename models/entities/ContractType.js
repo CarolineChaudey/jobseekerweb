@@ -8,7 +8,7 @@ module.exports = (api) => {
         primaryKey: true
       }
     }, {
-      tableName: 'Contract',
+      tableName: 'ContractType',
       paranoid: true
     });
 }

@@ -53,7 +53,19 @@ module.exports = (api) => {
         return res.status(200).send('Favorite websites saved.');
       });
     });
+  }
 
+  function setContractTypes(req, res, next) {
+    Seeker.findById(req.params.id)
+    .then((seeker) => {
+      if (null == seeker) {
+        return res.status(400).send('No seeker for given id.');
+      }
+      seeker.setContractTypes(req.body.contractTypes)
+      .then((result) => {
+        return res.status(200).send('Favorite contract types saved.');
+      });
+    });
   }
 
   function sendToken(seeker, res) {
@@ -78,6 +90,7 @@ module.exports = (api) => {
   return {create,
           connectSeeker,
           update,
-          setFavoriteWebsites};
+          setFavoriteWebsites,
+          setContractTypes};
 
 };
