@@ -86,7 +86,7 @@ module.exports = (api) => {
     return false;
   }
 
-  function setTags(req, res, next) {}
+  function setTags(req, res, next) {
 
     Seeker.findById(req.params.id)
     .then((seeker) => {
