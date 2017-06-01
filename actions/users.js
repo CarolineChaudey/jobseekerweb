@@ -86,24 +86,23 @@ module.exports = (api) => {
     return false;
   }
 
-  function setTags(req, res, next) {
+  function setTags(req, res, next) {}
+
     Seeker.findById(req.params.id)
     .then((seeker) => {
       if (null == seeker) {
         return res.status(400).send('No seeker for given id.');
       }
-      for (i in req.body.tags) {
-
+      for (let i = 0; i < req.body.tags.length; i++) {
         Tag.findOrCreate({
           where: {tag: req.body.tags[i]},
           defaults: {
             'tag': req.body.tags[i]
           }
         }).spread((tag, created) => {
-          if (created) {
-            console.log('New tag created.');
+          if (i == (req.body.tags.length - 1)) {
+            seeker.setTags(req.body.tags);
           }
-          seeker.addTag(tag);
         });
       }
     });
