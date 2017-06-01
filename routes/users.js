@@ -26,6 +26,10 @@ module.exports = (api) => {
              api.middlewares.bodyParser.json(),
              api.actions.users.setContractTypes);
 
+  router.put('/:id/favoriteTags',
+             api.middlewares.bodyParser.json(),
+             api.actions.users.setTags);
+
   router.put('/:id',
              api.middlewares.bodyParser.json(),
              api.actions.users.update);

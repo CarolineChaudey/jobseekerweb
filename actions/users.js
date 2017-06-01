@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 
 module.exports = (api) => {
   const Seeker = api.models.Seeker;
+  const Tag = api.models.Tag;
 
   function create(req, res, next) {
     req.body.pswd = sha1(req.body.pswd);
@@ -68,6 +69,47 @@ module.exports = (api) => {
     });
   }
 
+  function getTags() {
+    Tag.findAll()
+    .then((tags) => {
+      return tags;
+    });
+  }
+
+  function tagExists(tag) {
+    let tags = getTags();
+    for (oneTag in tags) {
+      if (oneTag.tag === tag) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function setTags(req, res, next) {
+    Seeker.findById(req.params.id)
+    .then((seeker) => {
+      if (null == seeker) {
+        return res.status(400).send('No seeker for given id.');
+      }
+      for (i in req.body.tags) {
+
+        Tag.findOrCreate({
+          where: {tag: req.body.tags[i]},
+          defaults: {
+            'tag': req.body.tags[i]
+          }
+        }).spread((tag, created) => {
+          if (created) {
+            console.log('New tag created.');
+          }
+          seeker.addTag(tag);
+        });
+      }
+    });
+    return res.status(200).send('Favorite tags saved.');
+  }
+
   function sendToken(seeker, res) {
     jwt.sign({ userId: seeker.id },
               api.settings.salt,
@@ -91,6 +133,7 @@ module.exports = (api) => {
           connectSeeker,
           update,
           setFavoriteWebsites,
-          setContractTypes};
+          setContractTypes,
+          setTags};
 
 };
