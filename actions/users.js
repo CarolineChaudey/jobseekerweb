@@ -42,6 +42,20 @@ module.exports = (api) => {
     });
   }
 
+  function setFavoriteWebsites(req, res, next) {
+    Seeker.findById(req.params.id)
+    .then((seeker) => {
+      if (null == seeker) {
+        return res.status(400).send('No seeker for given id.');
+      }
+      seeker.setWebsites(req.body.websites)
+      .then((result) => {
+        return res.status(200).send('Favorite websites saved.');
+      });
+    });
+
+  }
+
   function sendToken(seeker, res) {
     jwt.sign({ userId: seeker.id },
               api.settings.salt,
@@ -61,6 +75,9 @@ module.exports = (api) => {
     });
   }
 
-  return {create, connectSeeker, update};
+  return {create,
+          connectSeeker,
+          update,
+          setFavoriteWebsites};
 
 };

@@ -18,9 +18,14 @@ module.exports = (api) => {
               api.middlewares.checkFields(['login', 'pswd']),
               api.actions.users.connectSeeker);
 
+  router.put('/:id/favoriteWebsites',
+             api.middlewares.bodyParser.json(),
+             api.actions.users.setFavoriteWebsites);
+
   router.put('/:id',
              api.middlewares.bodyParser.json(),
              api.actions.users.update);
+
 /*
   router.delete('/:id',
   api.actions.users.remove);
