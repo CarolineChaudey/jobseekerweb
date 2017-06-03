@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 
 module.exports = (api) => {
   const Seeker = api.models.Seeker;
+  const Tag = api.models.Tag;
 
   function create(req, res, next) {
     req.body.pswd = sha1(req.body.pswd);
@@ -38,8 +39,74 @@ module.exports = (api) => {
       if (result[0] != 1) {
         return res.status(400).send('update failed.');
       }
-      return res.status(200).send('Update succeed.');
+      return res.status(200).send('Update succeeded.');
     });
+  }
+
+  function setFavoriteWebsites(req, res, next) {
+    Seeker.findById(req.params.id)
+    .then((seeker) => {
+      if (null == seeker) {
+        return res.status(400).send('No seeker for given id.');
+      }
+      seeker.setWebsites(req.body.websites)
+      .then((result) => {
+        return res.status(200).send('Favorite websites saved.');
+      });
+    });
+  }
+
+  function setContractTypes(req, res, next) {
+    Seeker.findById(req.params.id)
+    .then((seeker) => {
+      if (null == seeker) {
+        return res.status(400).send('No seeker for given id.');
+      }
+      seeker.setContractTypes(req.body.contractTypes)
+      .then((result) => {
+        return res.status(200).send('Favorite contract types saved.');
+      });
+    });
+  }
+
+  function getTags() {
+    Tag.findAll()
+    .then((tags) => {
+      return tags;
+    });
+  }
+
+  function tagExists(tag) {
+    let tags = getTags();
+    for (oneTag in tags) {
+      if (oneTag.tag === tag) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function setTags(req, res, next) {
+
+    Seeker.findById(req.params.id)
+    .then((seeker) => {
+      if (null == seeker) {
+        return res.status(400).send('No seeker for given id.');
+      }
+      for (let i = 0; i < req.body.tags.length; i++) {
+        Tag.findOrCreate({
+          where: {tag: req.body.tags[i]},
+          defaults: {
+            'tag': req.body.tags[i]
+          }
+        }).spread((tag, created) => {
+          if (i == (req.body.tags.length - 1)) {
+            seeker.setTags(req.body.tags);
+          }
+        });
+      }
+    });
+    return res.status(200).send('Favorite tags saved.');
   }
 
   function sendToken(seeker, res) {
@@ -61,6 +128,11 @@ module.exports = (api) => {
     });
   }
 
-  return {create, connectSeeker, update};
+  return {create,
+          connectSeeker,
+          update,
+          setFavoriteWebsites,
+          setContractTypes,
+          setTags};
 
 };

@@ -62,7 +62,7 @@ module.exports = (server) => {
     server.models.Seeker.belongsToMany(server.models.Tag, {through: 'FavoriteTags'});
     server.models.Tag.belongsToMany(server.models.Seeker, {through: 'FavoriteTags'});
     // un seeker a des contrats préférés
-    server.models.Seeker.belongsToMany(server.models.ContractType, {through: 'FavoriteContract'});
+    server.models.Seeker.belongsToMany(server.models.ContractType, {through: 'FavoriteContractTypes'});
     server.models.ContractType.belongsToMany(server.models.Seeker, {through: 'FavoriteContract'});
     // une annonce peurt proposer jusqu'à plusieurs types de contrats
     server.models.Ad.belongsToMany(server.models.ContractType, {through: 'ProposedContracts'});
