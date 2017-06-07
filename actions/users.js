@@ -21,17 +21,19 @@ module.exports = (api) => {
     }
   }
 
-  function connectSeeker(req, res, next) {
-    // trouver Seeker
-    let seeker = Seeker.findOne(
-      {where : {login: req.body.login,
-                pswd: sha1(req.body.pswd)}}
-    ).then((seeker) => {
-      if (!seeker) {
-        return res.status(404).send('Wrong login and/or password');
-      }
-      sendToken(seeker, res);
-    });
+  function connect(userModel) {
+    return (req, res, next) => {
+      // trouver Seeker
+      let user = userModel.findOne(
+        {where : {login: req.body.login,
+                  pswd: sha1(req.body.pswd)}}
+      ).then((user) => {
+        if (!user) {
+          return res.status(404).send('Wrong login and/or password');
+        }
+        sendToken(user, res);
+      });
+    }
   }
 
   function update(req, res, next) {
@@ -131,7 +133,7 @@ module.exports = (api) => {
   }
 
   return {create,
-          connectSeeker,
+          connect,
           update,
           setFavoriteWebsites,
           setContractTypes,

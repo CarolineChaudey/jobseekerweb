@@ -21,7 +21,7 @@ module.exports = (api) => {
   router.post('/seeker-auth',
               api.middlewares.bodyParser.json(),
               api.middlewares.checkFields(['login', 'pswd']),
-              api.actions.users.connectSeeker);
+              api.actions.users.connect(api.models.Seeker));
 
   router.put('/:id/favoriteWebsites',
              api.middlewares.bodyParser.json(),
