@@ -8,10 +8,10 @@ module.exports = (api) => {
   router.get('/:id',
   api.actions.users.findOne);
 */
-  router.post('/',
+  router.post('/seeker-signin',
               api.middlewares.bodyParser.json(),
               api.middlewares.checkFields(['firstname', 'lastname', 'login', 'pswd', 'email']),
-              api.actions.users.create);
+              api.actions.users.create(api.models.Seeker));
 
   router.post('/seeker-auth',
               api.middlewares.bodyParser.json(),

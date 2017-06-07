@@ -5,18 +5,20 @@ module.exports = (api) => {
   const Seeker = api.models.Seeker;
   const Tag = api.models.Tag;
 
-  function create(req, res, next) {
-    req.body.pswd = sha1(req.body.pswd);
-    Seeker.findOrCreate({
-      where: {login: req.body.login},
-      defaults: req.body
-    })
-    .spread((seeker, created) => {
-      if (!created) {
-        return res.status(409).send('login taken');
-      }
-      return res.status(200).send(seeker);
-    });
+  function create(userModel) {
+    return (req, res, next) => {
+      req.body.pswd = sha1(req.body.pswd);
+      userModel.findOrCreate({
+        where: {login: req.body.login},
+        defaults: req.body
+      })
+      .spread((user, created) => {
+        if (!created) {
+          return res.status(409).send('login taken');
+        }
+        return res.status(200).send(user);
+      });
+    }
   }
 
   function connectSeeker(req, res, next) {
