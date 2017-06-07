@@ -13,6 +13,11 @@ module.exports = (api) => {
               api.middlewares.checkFields(['firstname', 'lastname', 'login', 'pswd', 'email']),
               api.actions.users.create(api.models.Seeker));
 
+  router.post('/supervisor-signin',
+              api.middlewares.bodyParser.json(),
+              api.middlewares.checkFields(['firstname', 'lastname', 'login', 'pswd', 'email']),
+              api.actions.users.create(api.models.Supervisor));
+
   router.post('/seeker-auth',
               api.middlewares.bodyParser.json(),
               api.middlewares.checkFields(['login', 'pswd']),
