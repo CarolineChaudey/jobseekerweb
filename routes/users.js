@@ -23,6 +23,11 @@ module.exports = (api) => {
               api.middlewares.checkFields(['login', 'pswd']),
               api.actions.users.connect(api.models.Seeker));
 
+  router.post('/supervisor-auth',
+              api.middlewares.bodyParser.json(),
+              api.middlewares.checkFields(['login', 'pswd']),
+              api.actions.users.connect(api.models.Supervisor));
+
   router.put('/:id/favoriteWebsites',
              api.middlewares.bodyParser.json(),
              api.actions.users.setFavoriteWebsites);

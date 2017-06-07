@@ -28,10 +28,11 @@ module.exports = (api) => {
         {where : {login: req.body.login,
                   pswd: sha1(req.body.pswd)}}
       ).then((user) => {
+        console.log(user);
         if (!user) {
           return res.status(404).send('Wrong login and/or password');
         }
-        sendToken(user, res);
+        sendToken(userModel, user, res);
       });
     }
   }
@@ -113,16 +114,17 @@ module.exports = (api) => {
     return res.status(200).send('Favorite tags saved.');
   }
 
-  function sendToken(seeker, res) {
-    jwt.sign({ userId: seeker.id },
+  function sendToken(userModel, user, res) {
+    jwt.sign({ userId: user.id },
               api.settings.salt,
               {'expiresIn': api.settings.token_duration},
               function(err, genToken) {
                 if (err) {
+                  console.log(err);
                   return res.status(500).send('connection failed');
                 }
-                Seeker.update({token: genToken},
-                            {where: {id: seeker.id}}
+                userModel.update({token: genToken},
+                            {where: {id: user.id}}
                 ).then(function(result) {
                   if (result[0] != 1) {
                     return res.status(500).send('connection failed');
