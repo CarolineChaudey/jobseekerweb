@@ -28,7 +28,6 @@ module.exports = (api) => {
         {where : {login: req.body.login,
                   pswd: sha1(req.body.pswd)}}
       ).then((user) => {
-        console.log(user);
         if (!user) {
           return res.status(404).send('Wrong login and/or password');
         }
