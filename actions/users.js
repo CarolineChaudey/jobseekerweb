@@ -5,31 +5,35 @@ module.exports = (api) => {
   const Seeker = api.models.Seeker;
   const Tag = api.models.Tag;
 
-  function create(req, res, next) {
-    req.body.pswd = sha1(req.body.pswd);
-    Seeker.findOrCreate({
-      where: {login: req.body.login},
-      defaults: req.body
-    })
-    .spread((seeker, created) => {
-      if (!created) {
-        return res.status(409).send('login taken');
-      }
-      return res.status(200).send(seeker);
-    });
+  function create(userModel) {
+    return (req, res, next) => {
+      req.body.pswd = sha1(req.body.pswd);
+      userModel.findOrCreate({
+        where: {login: req.body.login},
+        defaults: req.body
+      })
+      .spread((user, created) => {
+        if (!created) {
+          return res.status(409).send('login taken');
+        }
+        return res.status(200).send(user);
+      });
+    }
   }
 
-  function connectSeeker(req, res, next) {
-    // trouver Seeker
-    let seeker = Seeker.findOne(
-      {where : {login: req.body.login,
-                pswd: sha1(req.body.pswd)}}
-    ).then((seeker) => {
-      if (!seeker) {
-        return res.status(404).send('Wrong login and/or password');
-      }
-      sendToken(seeker, res);
-    });
+  function connect(userModel) {
+    return (req, res, next) => {
+      // trouver Seeker
+      let user = userModel.findOne(
+        {where : {login: req.body.login,
+                  pswd: sha1(req.body.pswd)}}
+      ).then((user) => {
+        if (!user) {
+          return res.status(404).send('Wrong login and/or password');
+        }
+        sendToken(userModel, user, res);
+      });
+    }
   }
 
   function update(req, res, next) {
@@ -109,16 +113,17 @@ module.exports = (api) => {
     return res.status(200).send('Favorite tags saved.');
   }
 
-  function sendToken(seeker, res) {
-    jwt.sign({ userId: seeker.id },
+  function sendToken(userModel, user, res) {
+    jwt.sign({ userId: user.id },
               api.settings.salt,
               {'expiresIn': api.settings.token_duration},
               function(err, genToken) {
                 if (err) {
+                  console.log(err);
                   return res.status(500).send('connection failed');
                 }
-                Seeker.update({token: genToken},
-                            {where: {id: seeker.id}}
+                userModel.update({token: genToken},
+                            {where: {id: user.id}}
                 ).then(function(result) {
                   if (result[0] != 1) {
                     return res.status(500).send('connection failed');
@@ -129,7 +134,7 @@ module.exports = (api) => {
   }
 
   return {create,
-          connectSeeker,
+          connect,
           update,
           setFavoriteWebsites,
           setContractTypes,

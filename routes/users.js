@@ -8,15 +8,25 @@ module.exports = (api) => {
   router.get('/:id',
   api.actions.users.findOne);
 */
-  router.post('/',
+  router.post('/seeker-signin',
               api.middlewares.bodyParser.json(),
               api.middlewares.checkFields(['firstname', 'lastname', 'login', 'pswd', 'email']),
-              api.actions.users.create);
+              api.actions.users.create(api.models.Seeker));
+
+  router.post('/supervisor-signin',
+              api.middlewares.bodyParser.json(),
+              api.middlewares.checkFields(['firstname', 'lastname', 'login', 'pswd', 'email']),
+              api.actions.users.create(api.models.Supervisor));
 
   router.post('/seeker-auth',
               api.middlewares.bodyParser.json(),
               api.middlewares.checkFields(['login', 'pswd']),
-              api.actions.users.connectSeeker);
+              api.actions.users.connect(api.models.Seeker));
+
+  router.post('/supervisor-auth',
+              api.middlewares.bodyParser.json(),
+              api.middlewares.checkFields(['login', 'pswd']),
+              api.actions.users.connect(api.models.Supervisor));
 
   router.put('/:id/favoriteWebsites',
              api.middlewares.bodyParser.json(),
