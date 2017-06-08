@@ -5,7 +5,8 @@ module.exports = (api) => {
       id: {
         type: Sequelize.UUID,
         field: 'id',
-        primaryKey: true
+        primaryKey: true,
+        defaultValue: Sequelize.UUIDV4
       },
       name: {
         type: Sequelize.STRING,
