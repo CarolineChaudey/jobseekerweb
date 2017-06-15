@@ -4,6 +4,7 @@ module.exports = (api) => {
   const Company = api.models.Company;
   const ContractType = api.models.ContractType;
   const Tag = api.models.Tag;
+  const Website = api.models.Website;
   const Promise = require('bluebird');
 
   function create(req, res, next) {
@@ -11,11 +12,10 @@ module.exports = (api) => {
     let company;
     let constructedAd;
     let tags = []
+    let website;
 
-    // trouver ou creer les tags
     setTags(req)
     .then((returnedTags) => {
-      console.log('returnedTags = ', returnedTags);
       tags = returnedTags;
       return verifyContractTypes(req)
     })
@@ -24,9 +24,10 @@ module.exports = (api) => {
         return res.status(400).send('No valid contact types');
       }
       contractTypes = verifiedContractTypes;
+      return Website.find({where: {name: req.body.website}});
     })
-    // trouver ou créer l'entreprise concernee
-    .then(() => {
+    .then((returnedWebsite) => {
+      website = returnedWebsite;
       return Company.findOrCreate({
         where: {name: req.body.company},
         defaults: {name: req.body.company}
@@ -34,7 +35,6 @@ module.exports = (api) => {
         company = givenCompany;
       });
     })
-    // créer l'annonce avec ses relations
     .then((result) => {
       return Ad.create(req.body);
     })
@@ -43,6 +43,11 @@ module.exports = (api) => {
       return constructedAd.setCompany(company);
     })
     .then((adWithCompany) => {
+      if (req.body.website) {
+        return constructedAd.setWebsite(website);
+      }
+    })
+    .then((adWithMaybeAWebsite) => {
       return constructedAd.setContractTypes(contractTypes);
     })
     .then((adWithContracts) => {
@@ -59,10 +64,7 @@ module.exports = (api) => {
       return res.status(400).send('No contract type.');
     }
     return ContractType.findAll({
-      where: {
-        name: {
-          $in: contractTypes
-      }}
+      where: {name: {$in: contractTypes}}
     });
   }
 
@@ -78,7 +80,6 @@ module.exports = (api) => {
         }).spread((tag, created) => {
           tags.push(tag);
           if (i == (req.body.tags.length - 1)) {
-            console.log('Returning the tags : ', tags);
             resolve(tags);
           }
         });
