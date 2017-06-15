@@ -3,13 +3,22 @@ module.exports = (api) => {
   const Ad = api.models.Ad;
   const Company = api.models.Company;
   const ContractType = api.models.ContractType;
+  const Tag = api.models.Tag;
+  const Promise = require('bluebird');
 
   function create(req, res, next) {
     let contractTypes = [];
     let company;
+    let constructedAd;
+    let tags = []
 
-    // verifier les types de contrats
-    verifyContractTypes(req, res)
+    // trouver ou creer les tags
+    setTags(req)
+    .then((returnedTags) => {
+      console.log('returnedTags = ', returnedTags);
+      tags = returnedTags;
+      return verifyContractTypes(req)
+    })
     .then((verifiedContractTypes) => {
       if (verifiedContractTypes.length === 0) {
         return res.status(400).send('No valid contact types');
@@ -30,18 +39,21 @@ module.exports = (api) => {
       return Ad.create(req.body);
     })
     .then((ad) => {
-      return ad.setCompany(company);
+      constructedAd = ad;
+      return constructedAd.setCompany(company);
     })
     .then((adWithCompany) => {
-      console.log(adWithCompany);
-      return adWithCompany.setContractTypes(contractTypes);
+      return constructedAd.setContractTypes(contractTypes);
+    })
+    .then((adWithContracts) => {
+      return constructedAd.setTags(tags);
     })
     .then((result) => {
-      return res.status(200).send(result);
+      return res.status(200).send(constructedAd);
     });
  }
 
- function verifyContractTypes(req, res) {
+ function verifyContractTypes(req) {
     let contractTypes = req.body.contractTypes;
     if (contractTypes.length === 0) {
       return res.status(400).send('No contract type.');
@@ -51,6 +63,26 @@ module.exports = (api) => {
         name: {
           $in: contractTypes
       }}
+    });
+  }
+
+  function setTags(req) {
+    return new Promise(function(resolve, reject) {
+      let tags = [];
+      for (let i = 0; i < req.body.tags.length; i++) {
+        Tag.findOrCreate({
+          where: {tag: req.body.tags[i]},
+          defaults: {
+            'tag': req.body.tags[i]
+          }
+        }).spread((tag, created) => {
+          tags.push(tag);
+          if (i == (req.body.tags.length - 1)) {
+            console.log('Returning the tags : ', tags);
+            resolve(tags);
+          }
+        });
+      }
     });
   }
 

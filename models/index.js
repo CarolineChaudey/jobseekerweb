@@ -64,7 +64,7 @@ module.exports = (server) => {
     // un seeker a des contrats préférés
     server.models.Seeker.belongsToMany(server.models.ContractType, {through: 'FavoriteContractTypes'});
     server.models.ContractType.belongsToMany(server.models.Seeker, {through: 'FavoriteContract'});
-    // une annonce peurt proposer jusqu'à plusieurs types de contrats
+    // une annonce peut proposer jusqu'à plusieurs types de contrats
     server.models.Ad.belongsToMany(server.models.ContractType, {through: 'ProposedContracts'});
     server.models.ContractType.belongsToMany(server.models.Ad, {through: 'ProposedContracts'});
 
