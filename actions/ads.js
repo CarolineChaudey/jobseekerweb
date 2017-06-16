@@ -8,7 +8,11 @@ module.exports = (api) => {
   const Promise = require('bluebird');
 
   function search(req, res, next) {
-    return res.status(200).send('search function fetched.');
+    //return res.status(200).send('search function fetched.');
+    Ad.findAll()
+    .then((ads) => {
+      return res.status(200).send(ads);
+    });
   }
 
   function create(req, res, next) {
