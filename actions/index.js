@@ -1,6 +1,7 @@
 module.exports = (api) => {
     api.actions = {
       users: require('./users')(api),
-      websites: require('./websites')(api)
+      websites: require('./websites')(api),
+      ads: require('./ads')(api)
     };
 };
