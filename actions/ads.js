@@ -8,8 +8,33 @@ module.exports = (api) => {
   const Promise = require('bluebird');
 
   function search(req, res, next) {
-    //return res.status(200).send('search function fetched.');
-    Ad.findAll()
+    let whereCondition = {};
+    if (req.query.minDate || req.query.maxDate) {
+      whereCondition.publicationDate = {};
+    }
+    if (req.query.minDate) {
+      console.log(req.query.minDate);
+      whereCondition.publicationDate.$gte = req.query.minDate;
+    }
+    if (req.query.maxDate) {
+      whereCondition.publicationDate.$lte = req.query.maxDate;
+    }
+    /*
+    if (req.query.contractTypes) {
+      whereCondition.contractTypes = {};
+      whereCondition.contractTypes.$in = req.query.contractTypes;
+    }
+    if (req.query.websites) {
+      whereCondition.websites = {};
+      whereCondition.website.$in = req.query.websites;
+    }
+    if (req.query.tags) {
+      whereCondition.tags = {};
+      whereCondition.tags.$in = req.query.tags;
+    }
+    */
+    console.log('condition = ', whereCondition);
+    Ad.findAll({where: whereCondition})
     .then((ads) => {
       return res.status(200).send(ads);
     });
