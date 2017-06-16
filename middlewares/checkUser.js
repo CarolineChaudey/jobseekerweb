@@ -15,7 +15,7 @@ module.exports = (api) => {
           if (err) {
             return res.status(400).send('Invalid token.');
           }
-          userType.findOne({token: authorization}) // qui est son user ?
+          userType.findOne({where: {token: authorization}}) // qui est son user ?
           .then((user) => {
             if (!user) {
               return res.status(400).send('No ' + userType + ' for this token.');

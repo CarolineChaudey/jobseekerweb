@@ -7,6 +7,10 @@ module.exports = (api) => {
   const Website = api.models.Website;
   const Promise = require('bluebird');
 
+  function search(req, res, next) {
+    return res.status(200).send('search function fetched.');
+  }
+
   function create(req, res, next) {
     let contractTypes = [];
     let company;
@@ -87,5 +91,6 @@ module.exports = (api) => {
     });
   }
 
-  return {create};
+  return {create,
+          search};
 }
