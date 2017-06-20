@@ -14,6 +14,8 @@ module.exports = (api) => {
       + 'inner join "Website" on "Website"."id" = "Ad"."websiteId" '
       + 'inner join "ProposedContracts" on "ProposedContracts"."AdId" = "Ad"."id" '
       + 'inner join "ContractType" on "ContractType"."name" = "ProposedContracts"."ContractTypeName" '
+      + 'inner join "TagAd" on "TagAd"."AdId" = "Ad"."id" '
+      + 'inner join "Tag" on "TagAd"."TagTag" = "Tag"."tag" '
       + 'where "Ad"."deletedAt" is NULL ';
 
     if (req.query.minDate) {
@@ -24,22 +26,19 @@ module.exports = (api) => {
     }
     if (req.query.contractTypes) {
       let contractTypes = req.query.contractTypes.split(',');
-      console.log(contractTypes);
       query = query + 'and "ContractType"."name" in (:contractTypes) ';
       data.contractTypes = contractTypes;
     }
-    /*
     if (req.query.websites) {
-      whereCondition.websites = {};
-      whereCondition.website.$in = req.query.websites;
+      let websites = req.query.websites.split(',');
+      query = query + 'and "Website"."name" in (:websites) ';
+      data.websites = websites;
     }
-    */
-    /*
     if (req.query.tags) {
-      whereCondition.tags = {};
-      whereCondition.tags.$in = req.query.tags;
+      let tags = req.query.tags.split(',');
+      query = query + 'and "Tag"."tag" in (:tags) ';
+      data.tags = tags;
     }
-    */
     api.connection.query(query, {replacements: data, type: api.connection.QueryTypes.SELECT})
     .then(ads => {
       return res.status(200).send(ads);
