@@ -12,18 +12,14 @@ module.exports = (api) => {
     let includeCondition = [];
     let query =
       'select * from "Ad" '
-      + 'inner join "Website" on "Website"."id" = "Ad"."websiteId"'
-      + 'where "Ad"."deletedAt" is NULL';
+      + 'inner join "Website" on "Website"."id" = "Ad"."websiteId" '
+      + 'where "Ad"."deletedAt" is NULL ';
 
-    if (req.query.minDate || req.query.maxDate) {
-      whereCondition.publicationDate = {};
-    }
     if (req.query.minDate) {
-      console.log(req.query.minDate);
-      whereCondition.publicationDate.$gte = req.query.minDate;
+      query = query + 'and "Ad"."publicationDate" >= \'' + req.query.minDate + '\' ';
     }
     if (req.query.maxDate) {
-      whereCondition.publicationDate.$lte = req.query.maxDate;
+      query = query + 'and "Ad"."publicationDate" <= \'' + req.query.maxDate + '\' ';
     }
     /*
     if (req.query.contractTypes) {
