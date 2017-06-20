@@ -52,6 +52,7 @@ module.exports = (server) => {
     server.models.Ad.belongsTo(server.models.Company, {as: 'company'});
     // L'annonce a été postée sur un site
     server.models.Ad.belongsTo(server.models.Website, {as: 'website'});
+    server.models.Website.hasMany(server.models.Ad, {as: 'ads'});
     // une annonce a plusieurs tags
     server.models.Ad.belongsToMany(server.models.Tag, {through: 'TagAd'});
     server.models.Tag.belongsToMany(server.models.Ad, {through: 'TagAd'});

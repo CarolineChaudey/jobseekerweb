@@ -9,6 +9,12 @@ module.exports = (api) => {
 
   function search(req, res, next) {
     let whereCondition = {};
+    let includeCondition = [];
+    let query =
+      'select * from "Ad" '
+      + 'inner join "Website" on "Website"."id" = "Ad"."websiteId"'
+      + 'where "Ad"."deletedAt" is NULL';
+
     if (req.query.minDate || req.query.maxDate) {
       whereCondition.publicationDate = {};
     }
@@ -24,18 +30,19 @@ module.exports = (api) => {
       whereCondition.contractTypes = {};
       whereCondition.contractTypes.$in = req.query.contractTypes;
     }
+    */
     if (req.query.websites) {
       whereCondition.websites = {};
       whereCondition.website.$in = req.query.websites;
     }
+    /*
     if (req.query.tags) {
       whereCondition.tags = {};
       whereCondition.tags.$in = req.query.tags;
     }
     */
-    console.log('condition = ', whereCondition);
-    Ad.findAll({where: whereCondition})
-    .then((ads) => {
+    api.connection.query(query, { type: api.connection.QueryTypes.SELECT})
+    .then(ads => {
       return res.status(200).send(ads);
     });
   }
