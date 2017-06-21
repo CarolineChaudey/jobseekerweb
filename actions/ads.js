@@ -10,7 +10,8 @@ module.exports = (api) => {
   function search(req, res, next) {
     let data = {};
     let query =
-      'select * from "Ad" '
+      'select "Ad"."id", "position", "publicationDate", "email", "urlApplication", "description", "jobDuration" '
+      +'from "Ad" '
       + 'inner join "Website" on "Website"."id" = "Ad"."websiteId" '
       + 'inner join "ProposedContracts" on "ProposedContracts"."AdId" = "Ad"."id" '
       + 'inner join "ContractType" on "ContractType"."name" = "ProposedContracts"."ContractTypeName" '
