@@ -42,12 +42,14 @@ module.exports = (server) => {
     server.models.Resume.belongsTo(server.models.Seeker, {as: 'seeker'});
     // un chercheur peut déposer plusieurs candidatures qui lui sont propres
     server.models.Application.belongsTo(server.models.Seeker, {as: 'seeker'});
+    server.models.Seeker.hasMany(server.models.Application, {as: 'applications'});
     // la candidature comprend une modèle de lettre utilisé ...
     server.models.Application.belongsTo(server.models.Letter, {as: 'letter'});
     // ... et un CV
     server.models.Application.belongsTo(server.models.Resume, {as: 'resume'});
     // la candidature concerne une annonce
     server.models.Application.belongsTo(server.models.Ad, {as: 'ad'});
+    server.models.Ad.hasMany(server.models.Application, {as: 'applications'})
     // L'annonce provient d'une entreprise
     server.models.Ad.belongsTo(server.models.Company, {as: 'company'});
     // L'annonce a été postée sur un site
