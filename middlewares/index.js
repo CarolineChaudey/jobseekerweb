@@ -3,6 +3,6 @@ module.exports = (api) => {
         bodyParser: require('body-parser'),
         checkFields: require('./checkFields'),
         checkRightSeeker: require('./checkRightSeeker')(api),
-        checkSupervisor: require('./checkSupervisor')(api)
+        checkUser: require('./checkUser')(api)
     };
 };
