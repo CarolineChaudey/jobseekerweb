@@ -42,6 +42,10 @@ const Application = api.models.Application;
                 + 'from "Application" '
                 + 'where "deletedAt" is NULL ';
     let data = {};
+    if (req.query.state) {
+      query = query + 'and "state" = :state ';
+      data.state = req.query.state;
+    }
     Seeker.find({where: {token: req.headers['authorization']}})
     .then(seeker => {
       query = query + 'and "seekerId" = :seekerId ';
