@@ -38,10 +38,23 @@ const Application = api.models.Application;
   }
 
   function search(req, res, next) {
-    return res.status(200).send('Bien reçu !');
+    let query = 'select * '
+                + 'from "Application" '
+                + 'where "deletedAt" is NULL ';
+    let data = {};
+    Seeker.find({where: {token: req.headers['authorization']}})
+    .then(seeker => {
+      query = query + 'and "seekerId" = :seekerId ';
+      data.seekerId = seeker.id;
+    })
+    .then (() => {
+      api.connection.query(query, {replacements: data, type: api.connection.QueryTypes.SELECT})
+      .then(applications => {
+        return res.status(200).send(applications);
+      });
+    });
   }
 
-  return {
-    create,
-    search}
+  return {create,
+          search}
 };
