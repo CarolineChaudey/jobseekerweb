@@ -37,6 +37,11 @@ const Application = api.models.Application;
     });
   }
 
+  function search(req, res, next) {
+    return res.status(200).send('Bien reçu !');
+  }
+
   return {
-    create}
+    create,
+    search}
 };
