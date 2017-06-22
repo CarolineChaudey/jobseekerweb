@@ -46,6 +46,14 @@ const Application = api.models.Application;
       query = query + 'and "state" = :state ';
       data.state = req.query.state;
     }
+    if (req.query.minDate) {
+      query = query + 'and "createdAt" >= :minDate ';
+      data.minDate = req.query.minDate;
+    }
+    if (req.query.maxDate) {
+      query = query + 'and "createdAt" <= :maxDate ';
+      data.maxDate = req.query.maxDate;
+    }
     Seeker.find({where: {token: req.headers['authorization']}})
     .then(seeker => {
       query = query + 'and "seekerId" = :seekerId ';
