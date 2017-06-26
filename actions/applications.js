@@ -44,6 +44,8 @@ const Application = api.models.Application;
                 + 'inner join "Ad" on "Ad"."id" = "Application"."adId" '
                 + 'inner join "TagAd" on "Ad"."id" = "TagAd"."AdId" '
                 + 'inner join "Tag" on "Tag"."tag" = "TagAd"."TagTag" '
+                + 'inner join "ProposedContracts" on "ProposedContracts"."AdId" = "Ad"."id" '
+                + 'inner join "ContractType" on "ContractType"."name" = "ProposedContracts"."ContractTypeName" '
                 + 'inner join "Company" on "Company"."id" = "Ad"."companyId" '
                 + 'where "Application"."deletedAt" is NULL ';
     let data = {};
@@ -62,6 +64,10 @@ const Application = api.models.Application;
     if (req.query.tags) {
       query = query + 'and "Tag"."tag" in (:tags) ';
       data.tags = req.query.tags;
+    }
+    if (req.query.contractTypes) {
+      query = query + 'and "ContractType"."name" in (:contractTypes) ';
+      data.contractTypes = req.query.contractTypes;
     }
     Seeker.find({where: {token: req.headers['authorization']}})
     .then(seeker => {
