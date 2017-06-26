@@ -38,21 +38,30 @@ const Application = api.models.Application;
   }
 
   function search(req, res, next) {
-    let query = 'select * '
+    let query = 'select distinct "Application"."id", "state", "Application"."createdAt"'
+                + ', "Ad"."id", "Ad"."position", "Company"."name" as companyName '
                 + 'from "Application" '
-                + 'where "deletedAt" is NULL ';
+                + 'inner join "Ad" on "Ad"."id" = "Application"."adId" '
+                + 'inner join "TagAd" on "Ad"."id" = "TagAd"."AdId" '
+                + 'inner join "Tag" on "Tag"."tag" = "TagAd"."TagTag" '
+                + 'inner join "Company" on "Company"."id" = "Ad"."companyId" '
+                + 'where "Application"."deletedAt" is NULL ';
     let data = {};
     if (req.query.state) {
       query = query + 'and "state" = :state ';
       data.state = req.query.state;
     }
     if (req.query.minDate) {
-      query = query + 'and "createdAt" >= :minDate ';
+      query = query + 'and "Application"."createdAt" >= :minDate ';
       data.minDate = req.query.minDate;
     }
     if (req.query.maxDate) {
-      query = query + 'and "createdAt" <= :maxDate ';
+      query = query + 'and "Application"."createdAt" <= :maxDate ';
       data.maxDate = req.query.maxDate;
+    }
+    if (req.query.tags) {
+      query = query + 'and "Tag"."tag" in (:tags) ';
+      data.tags = req.query.tags;
     }
     Seeker.find({where: {token: req.headers['authorization']}})
     .then(seeker => {
