@@ -37,6 +37,51 @@ const Application = api.models.Application;
     });
   }
 
-  return {
-    create}
+  function search(req, res, next) {
+    let query = 'select distinct "Application"."id", "state", "Application"."createdAt"'
+                + ', "Ad"."id", "Ad"."position", "Company"."name" as companyName '
+                + 'from "Application" '
+                + 'inner join "Ad" on "Ad"."id" = "Application"."adId" '
+                + 'inner join "TagAd" on "Ad"."id" = "TagAd"."AdId" '
+                + 'inner join "Tag" on "Tag"."tag" = "TagAd"."TagTag" '
+                + 'inner join "ProposedContracts" on "ProposedContracts"."AdId" = "Ad"."id" '
+                + 'inner join "ContractType" on "ContractType"."name" = "ProposedContracts"."ContractTypeName" '
+                + 'inner join "Company" on "Company"."id" = "Ad"."companyId" '
+                + 'where "Application"."deletedAt" is NULL ';
+    let data = {};
+    if (req.query.state) {
+      query = query + 'and "state" = :state ';
+      data.state = req.query.state;
+    }
+    if (req.query.minDate) {
+      query = query + 'and "Application"."createdAt" >= :minDate ';
+      data.minDate = req.query.minDate;
+    }
+    if (req.query.maxDate) {
+      query = query + 'and "Application"."createdAt" <= :maxDate ';
+      data.maxDate = req.query.maxDate;
+    }
+    if (req.query.tags) {
+      query = query + 'and "Tag"."tag" in (:tags) ';
+      data.tags = req.query.tags;
+    }
+    if (req.query.contractTypes) {
+      query = query + 'and "ContractType"."name" in (:contractTypes) ';
+      data.contractTypes = req.query.contractTypes;
+    }
+    Seeker.find({where: {token: req.headers['authorization']}})
+    .then(seeker => {
+      query = query + 'and "seekerId" = :seekerId ';
+      data.seekerId = seeker.id;
+    })
+    .then (() => {
+      api.connection.query(query, {replacements: data, type: api.connection.QueryTypes.SELECT})
+      .then(applications => {
+        return res.status(200).send(applications);
+      });
+    });
+  }
+
+  return {create,
+          search}
 };
