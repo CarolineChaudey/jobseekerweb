@@ -5,6 +5,7 @@ module.exports = (api) => {
   const ContractType = api.models.ContractType;
   const Tag = api.models.Tag;
   const Website = api.models.Website;
+  const Supervisor = api.models.Supervisor;
   const Promise = require('bluebird');
 
   function search(req, res, next) {
@@ -60,7 +61,7 @@ module.exports = (api) => {
     })
     .then((verifiedContractTypes) => {
       if (verifiedContractTypes.length === 0) {
-        return res.status(400).send('No valid contact types');
+        return res.status(400).send('No valid contract types');
       }
       contractTypes = verifiedContractTypes;
       return Website.find({where: {name: req.body.website}});
@@ -91,6 +92,9 @@ module.exports = (api) => {
     })
     .then((adWithContracts) => {
       return constructedAd.setTags(tags);
+    })
+    .then(result => {
+      return constructedAd.setAuthor(req.body.user);
     })
     .then((result) => {
       return res.status(200).send(constructedAd);

@@ -20,6 +20,7 @@ module.exports = (api) => {
             if (!user) {
               return res.status(400).send('No ' + userType + ' for this token.');
             }
+            req.body.user = user;
             next();
           });
      });
