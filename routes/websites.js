@@ -7,6 +7,8 @@ module.exports = (api) => {
               api.middlewares.checkFields(['name', 'url']),
               api.actions.websites.create);
 
+  router.get('/',
+              api.actions.websites.getAllWebsites);
 
   return router;
 };
