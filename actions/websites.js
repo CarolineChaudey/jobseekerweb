@@ -14,5 +14,13 @@ module.exports = (api) => {
     });
   }
 
-  return {create};
+  function getAllWebsites(req, res, next) {
+    Website.findAll()
+    .then(websites => {
+      return res.status(200).send(websites);
+    });
+  }
+
+  return {create,
+          getAllWebsites};
 }
