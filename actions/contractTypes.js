@@ -1,10 +1,10 @@
 module.exports = (api) => {
-  const Website = api.models.Website;
+  const ContractType = api.models.ContractType;
 
   function getAllContractTypes(req, res, next) {
-    Website.findAll()
-    .then(websites => {
-      return res.status(200).send(websites);
+    ContractType.findAll()
+    .then(contractTypes => {
+      return res.status(200).send(contractTypes);
     });
   }
 
