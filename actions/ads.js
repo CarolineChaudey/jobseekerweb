@@ -8,6 +8,15 @@ module.exports = (api) => {
   const Supervisor = api.models.Supervisor;
   const Promise = require('bluebird');
 
+
+  function getAllAdsBySupervisor(req, res, next) {
+    console.log('In getAllAdsBySupervisor');
+    Ad.findAll({where: {authorId: req.body.user.id}})
+    .then(ads => {
+      return res.status(200).send(ads);
+    });
+  }
+
   function search(req, res, next) {
     let data = {};
     let query =
@@ -53,17 +62,19 @@ module.exports = (api) => {
     let constructedAd;
     let tags = []
     let website;
-
+    console.log(req.body);
     setTags(req)
     .then((returnedTags) => {
       tags = returnedTags;
       return verifyContractTypes(req)
     })
     .then((verifiedContractTypes) => {
+      console.log("contracts ok");
       if (verifiedContractTypes.length === 0) {
         return res.status(400).send('No valid contract types');
       }
       contractTypes = verifiedContractTypes;
+      console.log("Debut find website.");
       return Website.find({where: {name: req.body.website}});
     })
     .then((returnedWebsite) => {
@@ -97,15 +108,17 @@ module.exports = (api) => {
       return constructedAd.setAuthor(req.body.user);
     })
     .then((result) => {
-      return res.status(200).send(constructedAd);
+      return res.status(201).send(constructedAd);
     });
  }
 
  function verifyContractTypes(req) {
+   console.log("Debut verifyContractTypes");
     let contractTypes = req.body.contractTypes;
     if (contractTypes.length === 0) {
       return res.status(400).send('No contract type.');
     }
+    console.log("Fin verifyContractTypes");
     return ContractType.findAll({
       where: {name: {$in: contractTypes}}
     });
@@ -131,5 +144,6 @@ module.exports = (api) => {
   }
 
   return {create,
-          search};
+          search,
+          getAllAdsBySupervisor};
 }
