@@ -25,7 +25,7 @@ module.exports = (api) => {
     let data = {};
     data.authorId = req.body.user.id;
     let query = 'select "Ad"."id", "position", "publicationDate", "email", "jobDuration", '
-                + '"Company"."name" as company, count("Application"."id") as nbApplications '
+                + '"Company"."name" as company, count("Application"."id") as "nbApplications" '
                 + 'from "Ad" '
                 + 'inner join "Company" on "Company"."id" = "Ad"."companyId" '
                 + 'left outer join "Application" on "Application"."adId" = "Ad"."id"'
