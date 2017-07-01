@@ -13,6 +13,9 @@ module.exports = (api) => {
     Ad.destroy({where: {id: req.params.id,
                        authorId: req.body.user.id}}) // verifier que c'est l'auteur
     .then(result => {
+      if (result !== 1) {
+        return res.status(404).send('No active ad.');
+      };
       return res.status(200).send();
     });
   }
