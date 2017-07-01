@@ -25,11 +25,13 @@ module.exports = (api) => {
     let data = {};
     data.authorId = req.body.user.id;
     let query = 'select "Ad"."id", "position", "publicationDate", "email", "jobDuration", '
-                + '"Company"."name" as company '
+                + '"Company"."name" as company, count("Application"."id") as nbApplications '
                 + 'from "Ad" '
-                + 'inner join "Company" on "Company"."id" = "Ad"."companyId"'
+                + 'inner join "Company" on "Company"."id" = "Ad"."companyId" '
+                + 'left outer join "Application" on "Application"."adId" = "Ad"."id"'
                 + 'where "authorId" = :authorId '
-                +'and "Ad"."deletedAt" is null';
+                +' and "Ad"."deletedAt" is null '
+                + 'group by "Ad"."id", "Company"."name"';
     api.connection.query(query, {replacements: data, type: api.connection.QueryTypes.SELECT})
     .then(ads => {
       return res.status(200).send(ads);
