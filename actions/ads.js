@@ -28,7 +28,8 @@ module.exports = (api) => {
                 + '"Company"."name" as company '
                 + 'from "Ad" '
                 + 'inner join "Company" on "Company"."id" = "Ad"."companyId"'
-                + 'where "authorId" = :authorId ';
+                + 'where "authorId" = :authorId '
+                +'and "Ad"."deletedAt" is null';
     api.connection.query(query, {replacements: data, type: api.connection.QueryTypes.SELECT})
     .then(ads => {
       return res.status(200).send(ads);
