@@ -9,9 +9,28 @@ module.exports = (api) => {
   const Promise = require('bluebird');
 
 
+  function deleteAd(req, res, next) {
+    Ad.destroy({where: {id: req.params.id,
+                       authorId: req.body.user.id}}) // verifier que c'est l'auteur
+    .then(result => {
+      if (result !== 1) {
+        return res.status(404).send('No active ad.');
+      };
+      return res.status(200).send();
+    });
+  }
+
   function getAllAdsBySupervisor(req, res, next) {
     console.log('In getAllAdsBySupervisor');
-    Ad.findAll({where: {authorId: req.body.user.id}})
+    let data = {};
+    data.authorId = req.body.user.id;
+    let query = 'select "Ad"."id", "position", "publicationDate", "email", "jobDuration", '
+                + '"Company"."name" as company '
+                + 'from "Ad" '
+                + 'inner join "Company" on "Company"."id" = "Ad"."companyId"'
+                + 'where "authorId" = :authorId '
+                +'and "Ad"."deletedAt" is null';
+    api.connection.query(query, {replacements: data, type: api.connection.QueryTypes.SELECT})
     .then(ads => {
       return res.status(200).send(ads);
     });
@@ -21,7 +40,7 @@ module.exports = (api) => {
     let data = {};
     let query =
       'select "Ad"."id", "position", "publicationDate", "email", "urlApplication", "description", "jobDuration" '
-      +'from "Ad" '
+      + 'from "Ad" '
       + 'inner join "Website" on "Website"."id" = "Ad"."websiteId" '
       + 'inner join "ProposedContracts" on "ProposedContracts"."AdId" = "Ad"."id" '
       + 'inner join "ContractType" on "ContractType"."name" = "ProposedContracts"."ContractTypeName" '
@@ -145,5 +164,6 @@ module.exports = (api) => {
 
   return {create,
           search,
-          getAllAdsBySupervisor};
+          getAllAdsBySupervisor,
+          deleteAd};
 }

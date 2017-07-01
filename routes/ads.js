@@ -16,5 +16,9 @@ module.exports = (api) => {
              api.middlewares.checkUser(api.models.Supervisor),
              api.actions.ads.getAllAdsBySupervisor);
 
+  router.delete('/:id',
+                api.middlewares.checkUser(api.models.Supervisor),
+                api.actions.ads.deleteAd);
+
   return router;
 };
