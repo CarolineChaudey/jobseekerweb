@@ -1,6 +1,8 @@
 
 module.exports = (api) => {
 
+  let Application = api.models.Application;
+
   function getAdFlow(req, res, next) {
     let query = 'select date_trunc(\'day\', "Ad"."createdAt") as day, '
                 + 'count("Ad"."id") as "nbAd" '
@@ -16,6 +18,11 @@ module.exports = (api) => {
     });
   }
 
-  return {getAdFlow};
+  function getSentAppFlow(req, res, next) {
+    
+  }
+
+  return {getAdFlow,
+          getSentAppFlow};
 
 };
