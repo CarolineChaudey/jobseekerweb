@@ -6,7 +6,7 @@ module.exports = (api) => {
              api.middlewares.checkUser(api.models.Supervisor),
              api.actions.stats.getAdFlow);
 
-  router.get('/getAdFlow/:tag',
+  router.get('/getAppFlow/:tag',
               api.middlewares.checkUser(api.models.Supervisor),
               api.actions.stats.getSentAppFlow);
 
