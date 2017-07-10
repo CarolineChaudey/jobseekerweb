@@ -133,11 +133,16 @@ module.exports = (api) => {
     });
   }
 
+  function getSupervisorSeekers(req, res, next) {
+    return res.status(200).send('OK');
+  }
+
   return {create,
           connect,
           update,
           setFavoriteWebsites,
           setContractTypes,
-          setTags};
+          setTags,
+          getSupervisorSeekers};
 
 };
