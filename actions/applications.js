@@ -12,6 +12,29 @@ const Application = api.models.Application;
     });
   }
 
+  function findBySeeker(req, res, next) {
+    Seeker.find({attributes: ["id", "supervisorId"],
+                where: {id: req.params.seekerId}})
+    .then(seeker => {
+      if (!seeker) {
+        return res.status(400).send('Seeker does not exist.');
+      }
+      if (seeker.supervisorId !== req.body.user.id) {
+        return res.status(400).send('Not authorized for this seeker.');
+      }
+      return seeker;
+    })
+    .then((seeker) => {
+      return Application.findAll({where: {seekerId: seeker.id},
+                          attributes: ["id", "state", "createdAt", "updatedAt", "deletedAt",
+                                      "seekerId", "letterId", "resumeId", "adId"]
+                         })
+    })
+    .then(applications => {
+      return res.status(200).send(applications);
+    });
+  }
+
   function search(req, res, next) {
     let query = 'select distinct "Application"."id", "state", "Application"."createdAt"'
                 + ', "Ad"."id", "Ad"."position", "Company"."name" as companyName '
@@ -58,5 +81,6 @@ const Application = api.models.Application;
   }
 
   return {create,
-          search}
+          search,
+          findBySeeker}
 };
