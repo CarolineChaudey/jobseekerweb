@@ -48,6 +48,9 @@ module.exports = (api) => {
              api.middlewares.checkRightSeeker,
              api.actions.users.update);
 
+  router.get('/supSeekers',
+              api.middlewares.checkUser(api.models.Supervisor),
+              api.actions.users.getSupervisorSeekers);
 /*
   router.delete('/:id',
   api.actions.users.remove);

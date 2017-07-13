@@ -10,5 +10,9 @@ module.exports = (api) => {
               api.middlewares.checkUser(api.models.Supervisor),
               api.actions.stats.getSentAppFlow);
 
+  router.get('/getAppGlobalState/:tag',
+              api.middlewares.checkUser(api.models.Supervisor),
+              api.actions.stats.getAppGlobalState);
+
   return router;
 };

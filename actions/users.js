@@ -133,11 +133,20 @@ module.exports = (api) => {
     });
   }
 
+  function getSupervisorSeekers(req, res, next) {
+    //return res.status(200).send('OK');
+    Seeker.findAll({where: {supervisorId: req.body.user.id}})
+    .then(seekers => {
+      return res.status(200).send(seekers);
+    });
+  }
+
   return {create,
           connect,
           update,
           setFavoriteWebsites,
           setContractTypes,
-          setTags};
+          setTags,
+          getSupervisorSeekers};
 
 };
