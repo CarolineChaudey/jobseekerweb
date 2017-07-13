@@ -12,5 +12,9 @@ module.exports = (api) => {
              api.middlewares.checkUser(api.models.Seeker),
              api.actions.applications.search);
 
+  router.get('/:seekerId',
+             api.middlewares.checkUser(api.models.Supervisor),
+             api.actions.applications.findBySeeker);
+
   return router;
 };
