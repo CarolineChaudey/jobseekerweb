@@ -27,7 +27,8 @@ const Application = api.models.Application;
     .then((seeker) => {
       return Application.findAll({where: {seekerId: seeker.id},
                           attributes: ["id", "state", "createdAt", "updatedAt", "deletedAt",
-                                      "seekerId", "letterId", "resumeId", "adId"]
+                                      "seekerId", "letterId", "resumeId", "adId"],
+                          include: [{model: Ad, as: 'ad'}]
                          })
     })
     .then(applications => {
