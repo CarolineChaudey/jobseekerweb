@@ -25,14 +25,16 @@ const Application = api.models.Application;
       return seeker;
     })
     .then((seeker) => {
-      return Application.findAll({where: {seekerId: seeker.id},
-                          attributes: ["id", "state", "createdAt", "updatedAt", "deletedAt",
-                                      "seekerId", "letterId", "resumeId", "adId"],
-                          include: [{model: Ad, as: 'ad', paranoid: false}]
-                         })
-    })
-    .then(applications => {
-      return res.status(200).send(applications);
+      let query = 'select distinct "Application"."id", "state", "Application"."createdAt"'
+                  + ', "Ad"."id", "Ad"."position", "Company"."name" as company '
+                  + 'from "Application" '
+                  + 'inner join "Ad" on "Ad"."id" = "Application"."adId" '
+                  + 'inner join "Company" on "Company"."id" = "Ad"."companyId" '
+                  + 'where "Application"."seekerId" = \'' + seeker.id + '\'';
+        api.connection.query(query, {type: api.connection.QueryTypes.SELECT})
+        .then(applications => {
+        return res.status(200).send(applications);
+      });
     });
   }
 
